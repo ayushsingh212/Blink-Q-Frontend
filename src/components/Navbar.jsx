@@ -19,8 +19,8 @@ navigate(`/search/${encodeURIComponent(q.trim())}`)
 const checkServer = async()=>{
 
    try {
-      await axios.get(`${API_BASE_URL}/api-docs`)
-       console.log("I am working brother");
+    const res =   await axios.get(`${API_BASE_URL}/api/health`)
+       console.log("I am working brother",res);
    } catch (error) {
      console.log("Error occured while checking the server",error);
    }
