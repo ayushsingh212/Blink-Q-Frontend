@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
-import Home from './pages/Home'
-import Watch from './pages/Watch'
-import Search from './pages/Search'
-import Channel from './pages/Channel'
+import Navbar from './components/Navbar.jsx'
+import Sidebar from './components/Sidebar.jsx'
+import Home from './pages/Home.jsx'
+import Watch from './pages/Watch.jsx'
+import Search from './pages/Search.jsx'
+import Channel from './pages/Channel.jsx'
 
 
 export default function App() {

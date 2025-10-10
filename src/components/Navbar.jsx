@@ -1,5 +1,7 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { API_BASE_URL } from '../config/api.js'
 
 
 export default function Navbar({ onToggleSidebar }) {
@@ -13,6 +15,19 @@ if (!q.trim()) return
 navigate(`/search/${encodeURIComponent(q.trim())}`)
 }
 
+
+const checkServer = async()=>{
+
+   try {
+      await axios.get(`${API_BASE_URL}/api-docs`)
+       console.log("I am working brother");
+   } catch (error) {
+     console.log("Error occured while checking the server",error);
+   }
+
+}
+
+setInterval( checkServer, 5000);
 
 return (
 <nav className="w-full bg-[var(--card)] sticky top-0 z-30 shadow-sm">
