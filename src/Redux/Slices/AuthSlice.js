@@ -27,6 +27,8 @@ export const signupUser = createAsyncThunk(
                 FormData, 
                 {withCredentials:true, headers:{"Content-Type":"multipart/form-data"},
             })
+          
+            console.log("I am working",res)
 
             return res.data.data;
         } catch (error) {
@@ -44,6 +46,8 @@ export const loginUser = createAsyncThunk("/auth/loginUser",
                 credentials,
                 {withCredentials:true}
             );
+
+            console.log("I am working",res)
             return res.data.data;
         } catch (error) {
             return rejectWithValue(
