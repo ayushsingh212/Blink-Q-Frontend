@@ -6,6 +6,9 @@ import Home from './pages/Home'
 import Watch from './pages/Watch'
 import Search from './pages/Search'
 import Channel from './pages/Channel'
+import Signupform from './components/SignupForm'
+import Loginform from './components/LoginForm'
+import FloatingModal from './pages/FloatingModal'
 
 
 export default function App() {
