@@ -1,6 +1,6 @@
-import React, { useState,useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowLogin, loginUser, setError, setLoading } from "../Redux/Slices/AuthSlice";
+import { setShowLogin, loginUser, setError, clearError } from "../Redux/Slices/AuthSlice";
 
 const Loginform = () => {
     const dispatch = useDispatch();
@@ -21,12 +21,17 @@ const Loginform = () => {
         });
     }
 
-    const handleClickOutside = (e) =>{
-            if(modalRef.current && !modalRef.current.contains(e.target)){
-                dispatch(setShowLogin({login:false,signup:false}))
-            }
-        };
+    const handleClickOutside = (e) => {
+        if (modalRef.current && !modalRef.current.contains(e.target)) {
+            dispatch(clearError());
+            dispatch(setShowLogin({ login: false, signup: false }))
+        }
+    };
 
+    const clickSignup = () => {
+        dispatch(clearError());
+        dispatch(setShowLogin({ login: false, signup: true }))
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!formdata.email.endsWith("@gmail.com")) {
@@ -36,18 +41,18 @@ const Loginform = () => {
         dispatch(loginUser(formdata));
     }
 
-    useEffect(()=>{
-        document.addEventListener("mousedown",handleClickOutside)
-        return ()=>{
-            document.removeEventListener("mousedown",handleClickOutside)
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
         };
-    },[]);
+    }, []);
 
     return (
         <form
             ref={modalRef}
             onSubmit={handleSubmit}
-            className="bg-gray-900 p-6 rounded-xl shadow-lg w-96 flex flex-col gap-4"
+            className="bg-gray-900 text-gray-100 p-6 rounded-xl shadow-lg w-96 flex flex-col gap-4"
         >
             {error && <p className="text-red-500">{error}</p>}
             <h2 className="text-2xl font-semibold text-center">Login</h2>
@@ -57,21 +62,21 @@ const Loginform = () => {
                 placeholder="Enter Username"
                 value={formdata.username}
                 onChange={handleChange}
-                className="border p-2 rounded"
+                className="text-black border p-2 rounded"
             />
             <input
                 name="email"
                 placeholder="Enter email"
                 value={formdata.email}
                 onChange={handleChange}
-                className="border p-2 rounded"
+                className="text-black border p-2 rounded"
             />
             <input
                 name="password"
                 placeholder="Password"
                 value={formdata.password}
                 onChange={handleChange}
-                className="border p-2 rounded"
+                className="text-black border p-2 rounded"
             />
             <button
                 type="submit"
@@ -80,7 +85,7 @@ const Loginform = () => {
                 {loading ? "Loggin-in" : "Login"}
             </button>
             <p
-                onClick={() => dispatch(setShowLogin({ login: false, signup: true }))}
+                onClick={clickSignup}
                 className="text-sm text-blue-500 cursor-pointer text-center mt-2">
                 Don't have an account?? Signup
             </p>

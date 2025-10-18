@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowLogin, signupUser, setError } from "../Redux/Slices/AuthSlice";
+import { setShowLogin, signupUser, setError, clearError } from "../Redux/Slices/AuthSlice";
 
 
 const Signupform = () => {
@@ -29,6 +29,7 @@ const Signupform = () => {
 
     const handleClickOutside = (e) => {
         if (modalRef.current && !modalRef.current.contains(e.target)) {
+            dispatch(clearError());
             dispatch(setShowLogin({ login: false, signup: false }))
         }
     };
@@ -43,6 +44,10 @@ const Signupform = () => {
         }
     };
 
+    const clickLogin = () => {
+        dispatch(clearError());
+        dispatch(setShowLogin({ login: true, signup: false }))
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -86,7 +91,7 @@ const Signupform = () => {
                     }
                 }}
                 placeholder="Name"
-                className="border p-2 rounded"
+                className="border p-2 rounded text-gray-600"
                 value={formdata.fullName}
             />
             <input
@@ -105,7 +110,7 @@ const Signupform = () => {
                 title="There should be no spaces in Username"
                 placeholder="Username"
                 value={formdata.username}
-                className="border p-2 rounded"
+                className="border p-2 rounded text-gray-600"
             />
             <input
                 name="email"
@@ -122,7 +127,7 @@ const Signupform = () => {
                 }}
                 value={formdata.email}
                 placeholder="E-mail"
-                className="border p-2 rounded"
+                className="border p-2 rounded text-gray-600"
             />
             <input
                 name="password"
@@ -141,7 +146,7 @@ const Signupform = () => {
                 placeholder="Password"
                 title="Must be greater than 6 values"
                 value={formdata.password}
-                className="border p-2 rounded"
+                className="border p-2 rounded text-gray-600"
             />
             <div className="flex flex-col gap-2">
                 <label>Avatar</label>
@@ -149,7 +154,7 @@ const Signupform = () => {
                 {avatarPreview && (
                     <img
                         src={avatarPreview}
-                        alt={avatar}
+                        alt="avatar"
                         className="h-16 w-16 rounded-full object-cover"
                     />
                 )}
@@ -174,7 +179,7 @@ const Signupform = () => {
                 {loading ? "Creating Account" : "Sign-up"}
             </button>
             <p
-                onClick={() => dispatch(setShowLogin({ login: true, signup: false }))}
+                onClick={clickLogin}
                 className="text-sm text-blue-500 cursor-pointer text-center mt-2">
                 Already have an account? Login
             </p>
