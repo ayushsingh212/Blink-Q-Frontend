@@ -25,6 +25,7 @@ export const fetchUser = createAsyncThunk(
 export const signupUser = createAsyncThunk(
     "auth/signupUser",
     async (formData, { rejectWithValue, dispatch }) => {
+        dispatch(clearError());
         try {
             const res = await axios.post(`${API_BASE_URL}/user/register`,
                 formData,
@@ -46,7 +47,8 @@ export const signupUser = createAsyncThunk(
 )
 
 export const loginUser = createAsyncThunk("/auth/loginUser",
-    async (FormData, { rejectWithValue, dispatch }) => {
+    async (FormData, { rejectWithValue, dispatch}) => {
+        dispatch(clearError());
         try {
             const res = await axios.post(`${API_BASE_URL}/user/login`,
                 FormData,
@@ -61,6 +63,21 @@ export const loginUser = createAsyncThunk("/auth/loginUser",
             )
         }
     })
+
+    export const logout = createAsyncThunk("/auth/logout",
+        async(_, {rejectWithValue})=>{
+            try {
+                const res = await axios.post(`${API_BASE_URL}/user/logout`,null,
+                    {withCredentials:true}
+                );
+                return res.data;
+            } catch (error) {
+                console.log(error);
+                return rejectWithValue(
+                error?.res?.data?.message || "refresh token Failed")
+            }
+        }
+    )
 
     export const reFreshToken = createAsyncThunk("/auth/reFreshToken",
         async (_, { rejectWithValue, dispatch })=>{
@@ -88,7 +105,12 @@ const authSlice = createSlice({
         status: false,
         showLogin: {
             login: false,
-            signup: false
+            signup: false,
+            password: false
+        },
+        showUpload: {
+            post: false,
+            videos: false,
         },
         error: null,
     },
@@ -96,20 +118,19 @@ const authSlice = createSlice({
         setUser: (state, action) => {
             state.user = action.payload;
         },
-        logout: (state) => {
-            state.user = null;
-            state.showLogin = { login: true, signup: false };
-        },
         setShowLogin: (state, action) => {
-            state.showLogin = action.payload;
+            state.showLogin = {
+                ...state.showLogin,
+                ...action.payload
+            }
         },
         clearError: (state) => {
             state.error = null;
         },
-        setLoading: (state) => {
+        setLoading: (state,action) => {
             state.loading = action.payload;
         },
-        setError: (state) => {
+        setError: (state, action) => {
             state.error = action.payload;
         },
     },
@@ -122,6 +143,7 @@ const authSlice = createSlice({
                 state.user = action.payload;
                 console.log(state.user);
                 state.loading = false;
+                state.status = true;
                 state.error = null;
                 state.showLogin = { login: false, signup: false }
             })
@@ -133,12 +155,15 @@ const authSlice = createSlice({
             })
             .addCase(reFreshToken.fulfilled, ( )=>{
                 console.log("new tokens received");
+                state.loading = false;
             })
             .addCase(reFreshToken.rejected, (state)=>{
                 state.showLogin = { login: true, signup: false}
+                state.loading = false;
             })
             .addCase(signupUser.pending, (state) => {
                 state.loading = true;
+                
             })
             .addCase(signupUser.fulfilled, (state, action) => {
                 state.user = action.payload;
@@ -165,8 +190,16 @@ const authSlice = createSlice({
                 state.error = action.payload;
                 state.loading = false;
             })
+            .addCase(logout.pending,(state)=>{
+                state.loading=true;
+            })
+            .addCase(logout.fulfilled, (state, action)=>{
+                state.user = null;
+                state.status = false;
+                state.loading = false;
+            })
     }
 })
 
-export const { setShowLogin, setUser, logout, clearError, setError, setLoading, set } = authSlice.actions;
+export const { setShowLogin, setUser, clearError, setError, setLoading, set } = authSlice.actions;
 export default authSlice.reducer;
