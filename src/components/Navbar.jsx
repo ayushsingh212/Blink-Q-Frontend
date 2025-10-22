@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import Loginform from './LoginForm'
 import { setShowLogin } from '../Redux/Slices/AuthSlice'
 
 
@@ -9,6 +8,8 @@ export default function Navbar({ onToggleSidebar }) {
     const [q, setQ] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    
+    const [showDropdown, setShowDropdown] = useState(false);
 
     const { status } = useSelector((state) => state.auth)
 
@@ -56,7 +57,43 @@ export default function Navbar({ onToggleSidebar }) {
 
 
                 <div className="flex items-center gap-3">
-                    <button className="hidden md:inline p-2 rounded hover:bg-white/5">Upload</button>
+                     {status && (
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowDropdown(prev => !prev)}
+                                className="p-2 rounded hover:bg-white/5"
+                            >
+                                + Create
+                            </button>
+
+                            {showDropdown && (
+                                <div className="absolute right-0 mt-2 w-40 bg-slate-800 text-white rounded shadow-lg z-50">
+                                    <button
+                                        // onClick={() => navigate("/upload-video")}
+                                        className="block w-full text-left px-4 py-2 hover:bg-gray-600"
+                                    >
+                                        <i class="ri-video-upload-line"></i>
+                                        <span className='ml-3'>Upload Video</span>
+                                    </button>
+                                    <button
+                                        // onClick={() => navigate("/create-post")}
+                                        className="block w-full text-left px-4 py-2 hover:bg-gray-600"
+                                    >
+                                        <i class="ri-image-add-line"></i>
+                                        <span className='ml-3'>Create Post</span>
+                                    </button>
+                                    <button
+                                        // onClick={() => navigate("/go-live")}
+                                        className="block w-full text-left px-4 py-2 hover:bg-gray-600"
+                                    >
+                                        <i class="ri-live-line"></i>
+                                        <span className='ml-3'>Go Live</span>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {!status ? (
                         <button onClick={navigateLogin} className='w-24 h-8 roun'>Login</button>
                     ) : (

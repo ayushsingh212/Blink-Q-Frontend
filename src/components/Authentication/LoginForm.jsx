@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowLogin, loginUser, setError, clearError } from "../Redux/Slices/AuthSlice";
-
+import { setShowLogin, setError,loginUser, clearError  } from "../../Redux/Slices/AuthSlice";
 const Loginform = () => {
     const dispatch = useDispatch();
     const modalRef = useRef();

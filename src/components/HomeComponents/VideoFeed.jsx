@@ -1,6 +1,5 @@
 import React from 'react'
-import VideoCard from './VideoCard'
-
+import VideoCard from '../VideoCard'
 
 export default function VideoFeed({ videos }) {
 return (
