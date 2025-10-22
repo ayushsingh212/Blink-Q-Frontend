@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { setShowLogin } from '../Redux/Slices/AuthSlice'
+import { setShowLogin, setShowUpload } from '../Redux/Slices/AuthSlice'
 
 
 export default function Navbar({ onToggleSidebar }) {
@@ -17,6 +17,11 @@ export default function Navbar({ onToggleSidebar }) {
 
     const navigateLogin = () => {
         dispatch(setShowLogin({ login: true, signup: false }));
+    }
+
+    const VideoUploadPage = () => {
+        dispatch(setShowUpload({videos: true}));
+        console.log("done");
     }
 
     function submit(e) {
@@ -69,24 +74,24 @@ export default function Navbar({ onToggleSidebar }) {
                             {showDropdown && (
                                 <div className="absolute right-0 mt-2 w-40 bg-slate-800 text-white rounded shadow-lg z-50">
                                     <button
-                                        // onClick={() => navigate("/upload-video")}
+                                        onClick={VideoUploadPage}
                                         className="block w-full text-left px-4 py-2 hover:bg-gray-600"
                                     >
-                                        <i class="ri-video-upload-line"></i>
+                                        <i className="ri-video-upload-line"></i>
                                         <span className='ml-3'>Upload Video</span>
                                     </button>
                                     <button
                                         // onClick={() => navigate("/create-post")}
                                         className="block w-full text-left px-4 py-2 hover:bg-gray-600"
                                     >
-                                        <i class="ri-image-add-line"></i>
+                                        <i className="ri-image-add-line"></i>
                                         <span className='ml-3'>Create Post</span>
                                     </button>
                                     <button
                                         // onClick={() => navigate("/go-live")}
                                         className="block w-full text-left px-4 py-2 hover:bg-gray-600"
                                     >
-                                        <i class="ri-live-line"></i>
+                                        <i className="ri-live-line"></i>
                                         <span className='ml-3'>Go Live</span>
                                     </button>
                                 </div>

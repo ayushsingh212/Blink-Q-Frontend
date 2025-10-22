@@ -13,6 +13,7 @@ import UserDashboard from './pages/User-Dashboard/UserDashbord'
 import { useDispatch } from 'react-redux'
 import { fetchUser } from './Redux/Slices/AuthSlice'
 import { useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
 
 export default function App() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -20,8 +21,8 @@ export default function App() {
     const dispatch = useDispatch();
 
     const hideSidebar = ['/userdashboard'];
-    
-    const shouldHideSidebar = hideSidebar.some((path)=> (
+
+    const shouldHideSidebar = hideSidebar.some((path) => (
         location.pathname.startsWith(path)
     )
     );
@@ -29,13 +30,15 @@ export default function App() {
     useEffect(() => {
         dispatch(fetchUser());
         console.log("fetchuser runs");
-    },[dispatch])
+    }, [dispatch])
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <Navbar onToggleSidebar={() => setSidebarOpen(s => !s)} />
-            <div className="flex flex-1">
-                { !shouldHideSidebar && <Sidebarvideos open={sidebarOpen} />}
+        <>
+            <Toaster position="top-right" reverseOrder={false} />
+            <div className="min-h-screen flex flex-col">
+                <Navbar onToggleSidebar={() => setSidebarOpen(s => !s)} />
+                <div className="flex flex-1">
+                    {!shouldHideSidebar && <Sidebarvideos open={sidebarOpen} />}
                     <main className="flex-1 p-4 overflow-y-auto">
                         <FloatingModal />
                         <Routes>
@@ -49,7 +52,9 @@ export default function App() {
                             <Route path="/userdashboard" element={<UserDashboard />} />
                         </Routes>
                     </main>
+                </div>
             </div>
-        </div>
+        </>
+
     )
 }

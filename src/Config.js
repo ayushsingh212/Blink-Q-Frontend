@@ -1,1 +1,1 @@
-export const API_BASE_URL = "https://blinkq-backend.onrender.com/api"
+export const API_BASE_URL = "https://blink.cronaweb.me/api"
