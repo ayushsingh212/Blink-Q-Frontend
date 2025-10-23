@@ -20,12 +20,7 @@ export default function App() {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    const hideSidebar = ['/userdashboard'];
-
-    const shouldHideSidebar = hideSidebar.some((path) => (
-        location.pathname.startsWith(path)
-    )
-    );
+    const shouldHideSidebar = location.pathname === '/';
 
     useEffect(() => {
         dispatch(fetchUser());
@@ -38,14 +33,14 @@ export default function App() {
             <div className="min-h-screen flex flex-col">
                 <Navbar onToggleSidebar={() => setSidebarOpen(s => !s)} />
                 <div className="flex flex-1">
-                    {!shouldHideSidebar && <Sidebarvideos open={sidebarOpen} />}
+                    {shouldHideSidebar && <Sidebarvideos open={sidebarOpen} />}
                     <main className="flex-1 p-4 overflow-y-auto">
                         <FloatingModal />
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/watch/:id" element={<Watch />} />
                             <Route path="/search/:query" element={<Search />} />
-                            <Route path="/channel/:id" element={<Channel />} />
+                            <Route path="/channel/:username" element={<Channel />} />
                             <Route path="/floatingmodal" element={<FloatingModal />} />
                             <Route path="/login" element={<Loginform />} />
                             <Route path="/signup" element={<Signupform />} />

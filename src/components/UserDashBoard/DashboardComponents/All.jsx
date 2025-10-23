@@ -9,7 +9,7 @@ export default function All({ onSelectCategory }) {
         <>
             <Image />
             <UserDetails onSelectCategory={onSelectCategory} />
-            <WatchHistoryAll/>
+            <WatchHistoryAll />
         </>
     )
 }

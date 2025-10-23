@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 
 const SidebarUser = ({ onSelectedCategory }) => {
     const options = ["All", "Profile", "Watch History"];
@@ -16,7 +15,6 @@ const SidebarUser = ({ onSelectedCategory }) => {
                 <button
                     key={option}
                     onClick={() => handleSelect(option)}
-                    // className="block w-full text-left py-2 px-3 rounded hover:bg-gray-700">
                     className={`block w-full text-left py-2 px-3 my-2 mx-3 rounded transition-all duration-200 ${selected === option
                             ? "bg-gray-700 font-semibold text-blue-400"
                             : "hover:bg-slate-800 text-gray-300"

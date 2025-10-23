@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 const UserDetails = ({onSelectCategory}) => {
     const user = useSelector((state) => state.auth.user)
@@ -15,7 +14,7 @@ const UserDetails = ({onSelectCategory}) => {
             <h2 className="text-5xl font-bold mb-5">{user.fullName}</h2>
             <h4 className="text-2xl font-semibold">{user.username}
                 <span
-                    onClick={() => onSelectCategory("UserChannel")}  // ✅ trigger switch
+                    onClick={() => onSelectCategory("UserChannel")} 
                     className="ml-2 text-blue-400 underline hover:text-blue-600 cursor-pointer"
                 >
                     View Channel
