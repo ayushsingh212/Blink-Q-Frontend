@@ -1,6 +1,5 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import videos from '../data/videoData.js'
 import VideoFeed from '../components/HomeComponents/VideoFeed.jsx'
 
 export default function Search() {
