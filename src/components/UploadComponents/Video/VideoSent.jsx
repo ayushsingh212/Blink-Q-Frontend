@@ -74,14 +74,14 @@ export default function VideoSent({ videoFile }) {
                     headers: { "Content-Type": "multipart/form-data" }
                 });
             console.log("Upload Successfull", res.data);
-            toast.success("Video uploaded successfully!", { id: "upload" });
+            toast.success("Video uploaded successfully!");
             dispatch(clearError());
             dispatch(setShowUpload({videos:false}));
             navigate('/');
         } catch (error) {
             dispatch(setError(error));
             console.log("error sending video", error.response?.data?.message || error.message);
-            toast.error("Failed to upload video!", { id: "upload" });
+            toast.error("Failed to upload video!");
         } finally {
             console.log("run complete");
             dispatch(setLoading(false));

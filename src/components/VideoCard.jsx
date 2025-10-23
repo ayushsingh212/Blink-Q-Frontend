@@ -7,6 +7,8 @@ export default function VideoCard({ video }) {
   const avatar = video.owner?.avatar || "/default-avatar.png";
   const username = video.owner?.username || "Unknown User";
   const views = typeof video.__v === "number" ? video.__v.toLocaleString() : "0";
+  const id = video?.owner?._id;
+
   return (
     <div className="group">
       <Link to={`/watch/${video._id}`} className="block">
@@ -18,14 +20,14 @@ export default function VideoCard({ video }) {
 
 
       <div className="mt-2 flex gap-3">
-        <Link to={`/channel/${encodeURIComponent(username.toLowerCase().replace(/\s+/g, '-'))}`}>
+        <Link to={`/channel/${username}`}>
           <img src={avatar} alt="avatar" className="w-10 h-10 rounded-full" />
         </Link>
         <div className="flex-1">
           <Link to={`/watch/${video._id}`} className="font-semibold line-clamp-2">{video.title}</Link>
           <div className="text-sm text-[var(--muted)]">
             <Link
-              to={`/channel/${encodeURIComponent(username.toLowerCase().replace(/\\s+/g, '-'))}`}
+              to={`/channel/${username}`}
               className="hover:text-white"
             >
               {username}

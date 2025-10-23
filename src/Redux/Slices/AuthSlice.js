@@ -104,6 +104,7 @@ const authSlice = createSlice({
         user: null,
         loading: false,
         status: false,
+        id: "",
         showLogin: {
             login: false,
             signup: false,

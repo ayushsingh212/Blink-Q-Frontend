@@ -5,7 +5,6 @@ const Image = () => {
 
   const user = useSelector((state) => state.auth.user)
 
-
   if (!user) {
     return <p>User Loading</p>
   }

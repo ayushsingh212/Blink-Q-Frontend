@@ -16,7 +16,7 @@ export default function UserDashboard() {
             </div>
             <div className="w-4/5">
                 {selectedCategory === "All" && (
-                    <All onSelectCategory={setSelectedCategory} />  // ✅ pass setter
+                    <All onSelectCategory={setSelectedCategory} /> 
                 )}
                 {selectedCategory=="Profile" && <Profile/>}
                 {selectedCategory=="Watch History" && <WatchHistory/>}
