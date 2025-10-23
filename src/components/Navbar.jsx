@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowLogin, setShowUpload } from '../Redux/Slices/AuthSlice'
@@ -8,6 +8,7 @@ export default function Navbar({ onToggleSidebar }) {
     const [q, setQ] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const dropDown = useRef(null);
     
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -20,6 +21,7 @@ export default function Navbar({ onToggleSidebar }) {
     }
 
     const VideoUploadPage = () => {
+        setShowDropdown(false);
         dispatch(setShowUpload({videos: true}));
         console.log("done");
     }
@@ -30,6 +32,24 @@ export default function Navbar({ onToggleSidebar }) {
         navigate(`/search/${encodeURIComponent(q.trim())}`)
     }
 
+    useEffect(()=>{
+
+        function handleClickOutside(e){
+            if(dropDown.current && !dropDown.current.contains(e.target)){
+                setShowDropdown(false);
+            }
+        }
+
+            if(showDropdown){
+                document.addEventListener("mousedown",handleClickOutside);
+            } else {
+                document.removeEventListener("mousedown", handleClickOutside);
+            }
+
+            return()=>{
+                document.removeEventListener("mousedown", handleClickOutside);
+            }
+    },[showDropdown])
     return (
         <nav className="w-full bg-[var(--card)] sticky top-0 z-30 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
@@ -63,7 +83,7 @@ export default function Navbar({ onToggleSidebar }) {
 
                 <div className="flex items-center gap-3">
                      {status && (
-                        <div className="relative">
+                        <div className="relative" ref={dropDown}>
                             <button
                                 onClick={() => setShowDropdown(prev => !prev)}
                                 className="p-2 rounded hover:bg-white/5"
