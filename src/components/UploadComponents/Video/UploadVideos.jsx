@@ -4,7 +4,7 @@ import VideoSent from "./VideoSent";
 
 export default function UploadVideos() {
     const [videoFile, setVideoFile] = useState(null);
-    const [uploadStage, setUploadStage] = useState("select"); // "select", "uploading", "success"
+    const [uploadStage, setUploadStage] = useState("select"); 
 
     console.log("Current videoFile:", videoFile);
 

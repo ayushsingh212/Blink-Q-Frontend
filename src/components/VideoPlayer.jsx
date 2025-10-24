@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../Config";
 
 export default function VideoPlayer({ video }) {
-  // Handle empty state
   if (!video) {
     return (
       <div className="w-full bg-black rounded overflow-hidden shadow-sm flex justify-center items-center h-64">
@@ -13,7 +12,6 @@ export default function VideoPlayer({ video }) {
     );
   }
 
-  // Destructure properties safely
   const {
     videoFile,
     title,
@@ -29,19 +27,15 @@ export default function VideoPlayer({ video }) {
 
   const { profilePic, channelName, username } = owner;
 
-  // Like state (optimistic update)
   const [likeState, setLikeState] = useState({
     isLiked: initialIsLiked,
     likeCount: initialLikeCount,
     isLoading: false,
   });
 
-  // Toggle for description
   const [showDescription, setShowDescription] = useState(false);
 
-  // ✅ Handle Like / Unlike (Optimistic + Server Sync)
   const handleLike = useCallback(async () => {
-    // Avoid duplicate clicks while loading
     setLikeState((prev) => {
       if (prev.isLoading) return prev;
       const newIsLiked = !prev.isLiked;
@@ -71,7 +65,6 @@ export default function VideoPlayer({ video }) {
       }
     } catch (error) {
       console.error("Like toggle failed:", error);
-      // Rollback on failure
       setLikeState((prev) => ({
         ...prev,
         isLiked: !prev.isLiked,
@@ -85,7 +78,6 @@ export default function VideoPlayer({ video }) {
 
   return (
     <div>
-      {/* 🎥 Video Player */}
       <div className="w-full bg-black rounded overflow-hidden shadow-sm">
         {videoFile ? (
           <video
@@ -103,7 +95,6 @@ export default function VideoPlayer({ video }) {
         )}
       </div>
 
-      {/* 📝 Video Info */}
       <h1 className="mt-3 text-xl font-semibold text-white line-clamp-2">
         {title}
       </h1>
@@ -125,7 +116,6 @@ export default function VideoPlayer({ video }) {
         </div>
       )}
 
-      {/* 👤 Channel Info */}
       <Link to={`/channel/${username}`} className="block group">
         <div className="flex gap-2 my-3 items-center">
           <div className="h-8 w-8 bg-gray-600 rounded-full overflow-hidden flex-shrink-0 group-hover:ring-2 ring-blue-400 transition-all">
@@ -148,14 +138,12 @@ export default function VideoPlayer({ video }) {
         </div>
       </Link>
 
-      {/* ⚙️ Action Buttons */}
       <div className="mt-3 flex items-center gap-3 flex-wrap">
-        {/* 👍 Like Button */}
         <div className="flex gap-2 px-3 py-2 bg-white/5 rounded items-center hover:bg-white/10 transition-colors">
           <button
-            type="button" // ✅ Prevents page reload
+            type="button" 
             onClick={(e) => {
-              e.stopPropagation(); // ✅ Prevent bubbling to parent elements
+              e.stopPropagation(); 
               handleLike();
             }}
             disabled={likeState.isLoading}
@@ -177,7 +165,7 @@ export default function VideoPlayer({ video }) {
           </div>
         </div>
 
-        {/* 🔗 Share */}
+      
         <button
           type="button"
           className="px-3 py-2 bg-white/5 rounded text-white hover:bg-white/10 transition-colors flex items-center gap-1"
@@ -185,7 +173,7 @@ export default function VideoPlayer({ video }) {
           <i className="ri-share-line"></i> Share
         </button>
 
-        {/* 💾 Save */}
+        
         <button
           type="button"
           className="px-3 py-2 bg-white/5 rounded text-white hover:bg-white/10 transition-colors flex items-center gap-1"
