@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowLogin, signupUser, setError } from "../Redux/Slices/AuthSlice";
-
+import { setShowLogin, setError, signupUser, clearError } from "../../Redux/Slices/AuthSlice";
 
 const Signupform = () => {
     const dispatch = useDispatch();
@@ -21,36 +20,61 @@ const Signupform = () => {
     const [coverImagePreview, setCoverImagePreview] = useState(null);
 
     const handleChange = (e) => {
-        setFormdata({
-            ...formdata,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+
+        const sanitizedValue = value.replace(
+            /([\u2700-\u27BF]|[\uE000-\uF8FF]|[\uD83C-\uDBFF\uDC00-\uDFFF])/g,
+            ""
+        );
+        setFormdata((prev) => ({
+            ...prev,
+            [name]: sanitizedValue,
+        }));
     }
 
     const handleClickOutside = (e) => {
         if (modalRef.current && !modalRef.current.contains(e.target)) {
+            dispatch(clearError());
             dispatch(setShowLogin({ login: false, signup: false }))
         }
     };
 
     const handleFile = (e) => {
+
         const { name, files } = e.target;
-        if (files?.[0]) {
-            setFormdata({ ...formdata, [name]: files[0] });
-            const preview = URL.createObjectURL(files[0]);
+
+        if (files && files[0]) {
+
+            const file = files[0];
+
+            if (!file.type.startsWith("image/")) {
+                alert("Please select a valid image file.");
+                e.target.value = ""
+                return;
+            }
+
+            setFormdata((prev) => ({ ...prev, [name]: file }));
+            const preview = URL.createObjectURL(file);
             if (name === "avatar") setAvatarPreview(preview);
             if (name === "coverImage") setCoverImagePreview(preview)
         }
     };
 
+    const clickLogin = () => {
+        dispatch(clearError());
+        dispatch(setShowLogin({ login: true, signup: false }))
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
+        dispatch(clearError());
+        console.log("clicked");
+        
 
-        if (!formdata.email.endsWith("@gmail.com")) {
-            dispatch(setError("Invalid email: must end with @gmail.com"));
+        if (formdata.email === "@gmail.com" || !formdata.email.endsWith("@gmail.com")) {
+            dispatch(setError("Invalid email: must end with @gmail.com but shouldn't be @gmail.com"));
             return;
         }
-        if (formdata.password.length < 6) {
+        if (formdata.password.length < 8) {
             return;
         }
         const inputData = new FormData();
@@ -76,6 +100,7 @@ const Signupform = () => {
 
             <input
                 name="fullName"
+                maxLength={25}
                 onChange={(e) => {
                     const value = e.target.value;
 
@@ -86,11 +111,12 @@ const Signupform = () => {
                     }
                 }}
                 placeholder="Name"
-                className="border p-2 rounded"
+                className="border p-2 rounded text-gray-900"
                 value={formdata.fullName}
             />
             <input
                 name="username"
+                maxLength={25}
                 onChange={(e) => {
                     const value = e.target.value;
 
@@ -105,10 +131,11 @@ const Signupform = () => {
                 title="There should be no spaces in Username"
                 placeholder="Username"
                 value={formdata.username}
-                className="border p-2 rounded"
+                className="border p-2 rounded text-gray-900"
             />
             <input
                 name="email"
+                maxLength={100}
                 onChange={(e) => {
                     const value = e.target.value;
 
@@ -122,11 +149,13 @@ const Signupform = () => {
                 }}
                 value={formdata.email}
                 placeholder="E-mail"
-                className="border p-2 rounded"
+                className="border p-2 rounded text-gray-900"
             />
             <input
                 name="password"
                 type="password"
+                minLength={8}
+                maxLength={20}
                 onChange={(e) => {
                     const value = e.target.value;
 
@@ -141,22 +170,22 @@ const Signupform = () => {
                 placeholder="Password"
                 title="Must be greater than 6 values"
                 value={formdata.password}
-                className="border p-2 rounded"
+                className="border p-2 rounded text-gray-900"
             />
             <div className="flex flex-col gap-2">
                 <label>Avatar</label>
-                <input type="file" name="avatar" onChange={handleFile} />
+                <input type="file" name="avatar" accept="image/*" onChange={handleFile} />
                 {avatarPreview && (
                     <img
                         src={avatarPreview}
-                        alt={avatar}
+                        alt="avatar"
                         className="h-16 w-16 rounded-full object-cover"
                     />
                 )}
             </div>
             <div className="flex flex-col gap-2">
                 <label>Cover Image</label>
-                <input type="file" onChange={handleFile} name="coverImage" />
+                <input type="file" accept="image/*" onChange={handleFile} name="coverImage" />
                 {coverImagePreview && (
                     <img
                         src={coverImagePreview}
@@ -174,7 +203,7 @@ const Signupform = () => {
                 {loading ? "Creating Account" : "Sign-up"}
             </button>
             <p
-                onClick={() => dispatch(setShowLogin({ login: true, signup: false }))}
+                onClick={clickLogin}
                 className="text-sm text-blue-500 cursor-pointer text-center mt-2">
                 Already have an account? Login
             </p>
