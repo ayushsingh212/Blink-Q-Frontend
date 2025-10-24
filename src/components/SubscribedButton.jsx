@@ -4,10 +4,14 @@ import { API_BASE_URL } from "../Config";
 import toast from "react-hot-toast";
 
 function SubscribedButton({ username, id }) {
-    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [isSubscribed, setIsSubscribed] = useState(undefined);
     const [isLoading, setIsLoading] = useState(false);
+    const [isChecking, setIsChecking] = useState(true);
 
     const checkSubscribe = async () => {
+
+        setIsChecking(true);
+
         try {
             const res = await axios.get(
                 `${API_BASE_URL}/user/channelProfile/${username}`,
@@ -16,6 +20,8 @@ function SubscribedButton({ username, id }) {
             setIsSubscribed(res.data?.data.isSubscribed);
         } catch (error) {
             console.log("checkSubscribe failed", error);
+        } finally{
+            setIsChecking(false);
         }
     };
 
@@ -43,6 +49,14 @@ function SubscribedButton({ username, id }) {
     useEffect(() => {
         checkSubscribe();
     }, [username]);
+
+     if (isChecking || isSubscribed === undefined) {
+        return (
+            <button className="border-2 p-1 px-2 rounded-xl bg-gray-800 border-gray-600 text-white opacity-50 cursor-not-allowed">
+                Checking...
+            </button>
+        );
+    }
 
     return (
         <button 
