@@ -1,56 +1,61 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { API_BASE_URL } from "../Config";
 import toast from "react-hot-toast";
 
 function SubscribedButton({ username, id }) {
-
-    const [isSubcribed, setIsSubscribed] = useState(false);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const checkSubscribe = async () => {
         try {
-            const res = await axios.get(`${API_BASE_URL}/user/channelProfile/${username}`,
+            const res = await axios.get(
+                `${API_BASE_URL}/user/channelProfile/${username}`,
                 { withCredentials: true }
             );
-            console.log(res);
-            setIsSubscribed(res.data?.data.isSubcribed);
+            setIsSubscribed(res.data?.data.isSubscribed);
         } catch (error) {
-            console.log("checkSubscribe failed");
+            console.log("checkSubscribe failed", error);
         }
-    }
+    };
 
-    const subscribe = async() => {
+    const toggleSubscribe = async () => {
+        if (isLoading) return;
+        
+        setIsLoading(true);
         try {
-            const res = await axios.post(`http://localhost:8080/api/subscription/${id}/subscribe`,
-                {withCredentials:true}
+            const res = await axios.post(
+                `${API_BASE_URL}/subscription/toggleSubscribe/${id}`,
+                {},
+                { withCredentials: true }
             );
-            setIsSubscribed(true);
-            console.log(res);
+            
+            setIsSubscribed(res.data.data.isSubscribed);
             toast.success(res.data.message);
         } catch (error) {
             console.log(error);
-            toast.error("Couldn't Subscribe");
+            toast.error("Couldn't update subscription");
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         checkSubscribe();
-    })
+    }, [username]);
+
     return (
-        <div>
-            {isSubcribed ? (
-                <select>
-                    <option>Subscribed</option>
-                    <option>Unsubscribe</option>
-                </select>
-            ) : (
-                <button 
-                className="bg-black border-white border-2 p-1 px-2 rounded-xl"
-                onClick={subscribe}
-                >Subscribe</button>
-    )
-}
-        </div >
+        <button 
+            className={`border-2 p-1 px-2 rounded-xl hover:opacity-80 disabled:opacity-50 ${
+                isSubscribed 
+                    ? "bg-gray-800 border-gray-600 text-white" 
+                    : "bg-red-600 border-red-600 text-white"
+            }`}
+            onClick={toggleSubscribe}
+            disabled={isLoading}
+        >
+            {isLoading ? "Loading..." : (isSubscribed ? "Subscribed" : "Subscribe")}
+        </button>
     );
 }
 
