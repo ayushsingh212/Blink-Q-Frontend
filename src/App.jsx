@@ -14,6 +14,8 @@ import { useDispatch } from 'react-redux'
 import { fetchUser } from './Redux/Slices/AuthSlice'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
+import RoomPage from './pages/videoCall/Room.jsx'
+import LobbyScreen from './pages/videoCall/Lobby.jsx'
 
 export default function App() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -38,6 +40,8 @@ export default function App() {
                         <FloatingModal />
                         <Routes>
                             <Route path="/" element={<Home />} />
+                            <Route path='/lobby' element={<LobbyScreen/>}/>
+                            <Route  path="/room/:roomId" element ={<RoomPage/>}   />
                             <Route path="/watch/:id" element={<Watch />} />
                             <Route path="/search/:query" element={<Search />} />
                             <Route path="/channel/:username" element={<Channel />} />
