@@ -11,7 +11,7 @@ export default function CommentsSection({ id }) {
     useEffect(()=>{
         console.log("Updated comments:", comments);
         fetchcomment({id});
-    },[]);
+    },[id]);
 
     return (
         <div className="mt-6">
