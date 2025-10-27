@@ -10,6 +10,11 @@ export default function Watch() {
     const { id } = useParams()
     const [video, setVideo] = useState();
     const [relatedVideos, setRelatedVideos] = useState([]);
+    const [showComments, setShowComments] = useState(false);
+
+    const handleShowComments = () => {
+        setShowComments((prev) => !prev);
+    }
 
     useEffect(() => {
 
@@ -49,8 +54,24 @@ export default function Watch() {
             <div className="lg:col-span-2">
                 <VideoPlayer video={video} />
                 <div className="mt-4 bg-[var(--card)] p-4 rounded">
-                    <h3 className="font-semibold mb-2">Comments</h3>
-                    <CommentsSection id={id} />
+                    {showComments ? (
+                        <button
+                            onClick={handleShowComments}>
+                            <h3 className="font-semibold mb-2">
+                                Show Comments
+                            </h3>
+                        </button>
+                    ) : (
+                        <>
+                            <button
+                                onClick={handleShowComments}>
+                                <h3 className="font-semibold mb-2">
+                                    Close Comments
+                                </h3>
+                            </button>
+                            <CommentsSection key={id} id={id} />
+                        </>
+                    )}
                 </div>
             </div>
 
