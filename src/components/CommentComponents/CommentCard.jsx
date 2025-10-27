@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 export default function CommentCard({ comment, edit, commentId }) {
 
     const user = useSelector((state) => state.auth.user);
-    const { replyMode, commentMode, sending, setEditComment, setSending, setReplying, setCommentId, setEditable, editable } = useComments();
+    const { replyMode, commentMode, sending, setEditComment, setSending, setReplying, setCommentId, setEditable, editable,setComments, deleteComment } = useComments();
     const [viewReply, setViewReply] = useState(false);
 
     const handleView = () => {
@@ -34,6 +34,11 @@ export default function CommentCard({ comment, edit, commentId }) {
         setReplying(false);
         setEditComment("");
         setCommentId("");
+    }
+
+    const handleDelete = () => {
+        deleteComment(commentId);
+        setComments((prev)=> prev.filter((c)=> c._id !== commentId));
     }
 
     return (
@@ -82,7 +87,7 @@ export default function CommentCard({ comment, edit, commentId }) {
                                 Edit
                             </button>
                         )}
-                        <button className="ml-5">
+                        <button className="ml-5" onClick={handleDelete}>
                             Delete
                         </button>
                     </>

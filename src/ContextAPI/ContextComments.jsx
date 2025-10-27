@@ -127,6 +127,20 @@ export const CommentsProvider = ({ children }) => {
         }
     }
 
+    const deleteComment = async(Id) => {
+        setLoading(true);
+        try {
+            const res = await axios.delete(`${API_BASE_URL}/comment/${Id}`,
+                {withCredentials:true}
+            );
+            console.log(res);
+        } catch (error) {
+            console.log("error deleting",error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const replyMode = (commentId) => {
         setSending(false);
         setReplying(true);
@@ -144,6 +158,7 @@ export const CommentsProvider = ({ children }) => {
     return (
         <CommentsContext.Provider value={{
             comments,
+            setComments,
             ownComments,
             otherComments,
             setComments,
@@ -165,7 +180,8 @@ export const CommentsProvider = ({ children }) => {
             setCommentId,
             editComment,
             setEditComment,
-            editCommentAPI
+            editCommentAPI,
+            deleteComment
         }}>
             {children}
         </CommentsContext.Provider>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import CommentInput from './CommentComponents/COmmentInput';
+import CommentInput from './CommentComponents/CommentInput';
 import { useComments } from '../ContextAPI/ContextComments'
 import AllComments from './CommentComponents/AllComments';
 
