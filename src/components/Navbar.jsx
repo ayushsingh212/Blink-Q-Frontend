@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setShowLogin, setShowUpload } from '../Redux/Slices/AuthSlice'
 
-
 export default function Navbar({ onToggleSidebar }) {
     const [q, setQ] = useState('')
     const navigate = useNavigate()
@@ -63,7 +62,7 @@ export default function Navbar({ onToggleSidebar }) {
 
 
                 <Link to="/" className="flex items-center gap-2">
-                    <div className="w-8 h-6 bg-red-600 rounded-sm flex items-center justify-center font-bold">BQ</div>
+                    <img src="/blinkb.png" alt="App logo" className="h-10 w-10 rounded-full" />
                     <span className="font-semibold hidden sm:inline">BlinkQ</span>
                 </Link>
 
