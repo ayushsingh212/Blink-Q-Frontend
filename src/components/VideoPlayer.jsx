@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../Config";
+import CommentsSection from "./CommentSection";
 
 export default function VideoPlayer({ video }) {
   if (!video) {
