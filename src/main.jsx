@@ -6,16 +6,19 @@ import './index.css'
 import { Provider } from 'react-redux'
 import { store } from './Redux/Store'
 import { SocketProvider } from './context/SocketProvider.jsx'
+import { CommentsProvider } from './ContextAPI/ContextComments.jsx'
 
 
 createRoot(document.getElementById('root')).render(
-<React.StrictMode>
-<BrowserRouter>
-<SocketProvider>
-<Provider store={store}>
-<App />
-</Provider>
-</SocketProvider>
-</BrowserRouter>
-</React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
+            <BrowserRouter>
+                <SocketProvider>
+                    <CommentsProvider>
+                        <App />
+                    </CommentsProvider>
+                </SocketProvider>
+            </BrowserRouter>
+        </Provider>
+    </React.StrictMode>
 )
