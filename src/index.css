@@ -2,18 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
---bg: #0f1724; /* dark blue-ish */
---card: #0b1220;
---muted: #9aa4b2;
+  --bg: #000000;
+  --card: #000000;
+  --muted: #000000;
 }
-
 
 body {
-@apply bg-[var(--bg)] text-gray-100;
+  @apply bg-[var(--bg)] text-white;
 }
 
-
 /* small helpers */
-.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

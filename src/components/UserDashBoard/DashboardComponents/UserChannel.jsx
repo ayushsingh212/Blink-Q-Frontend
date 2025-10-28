@@ -5,14 +5,13 @@ import ChannelVideos from "../../ChannelComponents/ChannelVideos";
 import { useSelector } from "react-redux";
 
 export default function UserChannel() {
+  const user = useSelector((state) => state.auth.user);
 
-    const user = useSelector((state) => state.auth.user)
-    
-    return(
-        <>
-        <Image />
-        <UserChannelDetails />
-        <ChannelVideos id={user._id}/>
-        </>
-    )
+  return (
+    <>
+      <Image />
+      <UserChannelDetails />
+      <ChannelVideos id={user._id} />
+    </>
+  );
 }
