@@ -100,7 +100,7 @@ export default function VideoPlayer({ video }) {
         {title}
       </h1>
 
-      <div className="text-sm text-[var(--muted)] my-2 flex items-center flex-wrap">
+      <div className="text-sm text-white text-[var(--muted)] my-2 flex items-center flex-wrap">
         {channel} • {video?.views?.toLocaleString?.() || 0} views • {uploaded}
         <button
           type="button"
@@ -111,7 +111,7 @@ export default function VideoPlayer({ video }) {
         </button>
       </div>
 
-      {showDescription && description && (
+      { showDescription && description && (
         <div className="my-2 w-full bg-[#0E2954] p-3 rounded-xl text-white">
           <p>{description}</p>
         </div>
