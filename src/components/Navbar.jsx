@@ -80,15 +80,15 @@ export default function Navbar({ onToggleSidebar }) {
           <span className="font-semibold hidden sm:inline">Blink-B</span>
         </Link>
 
-        <form onSubmit={submit} className="flex-1 max-w-xl mx-4">
+        <form onSubmit={submit} className="flex-1 max-w-xl md:mx-4 ">
           <div className="relative">
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search"
-              className="w-full rounded px-3 py-2 bg-transparent border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/10"
+              className="w-full text-white rounded px-3 py-2 bg-transparent border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/10"
             />
-            <button className="absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1 bg-white/5 rounded">
+            <button className="absolute hidden md:block right-1 top-1/2 -translate-y-1/2 px-3 py-1 bg-white/5 rounded">
               Search
             </button>
           </div>
@@ -99,7 +99,7 @@ export default function Navbar({ onToggleSidebar }) {
             <div className="relative" ref={dropDown}>
               <button
                 onClick={() => setShowDropdown((prev) => !prev)}
-                className="px-2 rounded-lg hover:bg-white/5 border-[2px] border-white p-1"
+                className="px-2 text-sm md:text-base rounded-lg hover:bg-white/5 border-[2px] border-white p-1"
               >
                 + Create
               </button>
@@ -135,7 +135,7 @@ export default function Navbar({ onToggleSidebar }) {
           { status && (
             <button 
             onClick={()=> navigate('/lobby')}
-            className=" border-[2px] border-white rounded-lg p-1 px-3 ml-2">Lobby</button>
+            className=" border-[2px] hidden border-white rounded-lg p-1 px-3 ml-2 md:block">Lobby</button>
           )}
 
           {!status ? (
@@ -144,7 +144,7 @@ export default function Navbar({ onToggleSidebar }) {
             </button>
           ) : (
             <button onClick={() => navigate("/userdashboard")}>
-              <img src={link} alt="avatar" className="w-11 h-11 ml-2 border-[3px] p-[1px] rounded-full" />
+              <img src={link} alt="avatar" className="md:w-11 md:h-11 w-8 h-8 ml-2 border-[3px] p-[1px] rounded-full" />
             </button>
           )}
 
