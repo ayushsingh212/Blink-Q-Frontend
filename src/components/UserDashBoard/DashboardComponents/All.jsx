@@ -6,14 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function All({ onSelectCategory }) {
 
-    const navigate = useNavigate();
-
     return (
         <>
             <Image />
             <UserDetails onSelectCategory={onSelectCategory} />
             <WatchHistoryAll />
-            <button onClick={()=> navigate('/lobby')}>Lobby</button>
         </>
     )
 }

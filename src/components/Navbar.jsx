@@ -99,7 +99,7 @@ export default function Navbar({ onToggleSidebar }) {
             <div className="relative" ref={dropDown}>
               <button
                 onClick={() => setShowDropdown((prev) => !prev)}
-                className="p-2 rounded hover:bg-white/5"
+                className="px-2 rounded-lg hover:bg-white/5 border-[2px] border-white p-1"
               >
                 + Create
               </button>
@@ -132,15 +132,22 @@ export default function Navbar({ onToggleSidebar }) {
             </div>
           )}
 
+          { status && (
+            <button 
+            onClick={()=> navigate('/lobby')}
+            className=" border-[2px] border-white rounded-lg p-1 px-3 ml-2">Lobby</button>
+          )}
+
           {!status ? (
-            <button onClick={navigateLogin} className="w-24 h-8 roun">
+            <button onClick={navigateLogin} className="w-24 h-8 ">
               Login
             </button>
           ) : (
             <button onClick={() => navigate("/userdashboard")}>
-              <img src={link} alt="avatar" className="w-8 h-8 rounded-full" />
+              <img src={link} alt="avatar" className="w-11 h-11 ml-2 border-[3px] p-[1px] rounded-full" />
             </button>
           )}
+
         </div>
       </div>
     </nav>
