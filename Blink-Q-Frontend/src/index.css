@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #000000;
+  --card: #000000;
+  --muted: #000000;
+}
+
+body {
+  @apply bg-[var(--bg)] text-white;
+}
+
+/* small helpers */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
