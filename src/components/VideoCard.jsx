@@ -1,108 +1,135 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function VideoCard({ video }) {
-  const avatar = video.owner?.avatar || "/default-avatar.png";
-  const username = video.owner?.username || "Unknown User";
+type Owner = {
+  _id: string;
+  username: string;
+  avatar: string;
+};
 
-  const viewsCount = video.views ?? video.__v ?? 0;
-  const views =
-    typeof viewsCount === "number" ? viewsCount.toLocaleString() : "0";
-  const id = video?.owner?._id;
-  const videoFile = video?.videoFile;
+type Video = {
+  _id: string;
+  title: string;
+  thumbnail: string;
+  videoFile: string;
+  views: number;
+  owner: Owner;
+};
+
+interface VideoCardProps {
+  video: Video;
+}
+
+export default function VideoCard({ video }: VideoCardProps) {
+  const avatar = video?.owner?.avatar || "/default-avatar.png";
+  const username = video?.owner?.username || "Unknown";
+
   const thumbnail =
-    video.thumbnail || "https://placehold.co/600x400/1a1a1a/ffffff?text=Video";
+    video?.thumbnail ||
+    "https://placehold.co/600x400/1a1a1a/ffffff?text=Video";
+
+  const views = (video?.views || 0).toLocaleString();
 
   const [duration, setDuration] = useState("0:00");
 
-  const formatDuration = (seconds) => {
+  /* Format Duration */
+  const formatDuration = (seconds: number) => {
     if (!seconds || isNaN(seconds)) return "0:00";
+
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60)
       .toString()
       .padStart(2, "0");
+
     return `${mins}:${secs}`;
   };
 
+  /* Load Video Metadata */
   useEffect(() => {
-    if (videoFile) {
-      const videoEl = document.createElement("video");
-      videoEl.preload = "metadata";
-      videoEl.src = videoFile;
+    if (!video?.videoFile) return;
 
-      const onLoadedMetadata = () => {
-        setDuration(formatDuration(videoEl.duration));
-        videoEl.removeEventListener("loadedmetadata", onLoadedMetadata);
-        videoEl.remove();
-      };
+    const videoEl = document.createElement("video");
+    videoEl.src = video.videoFile;
+    videoEl.preload = "metadata";
 
-      const onError = () => {
-        console.error("Error loading video metadata for duration.");
-        videoEl.removeEventListener("error", onError);
-        videoEl.remove();
-      };
+    const handleLoaded = () => {
+      setDuration(formatDuration(videoEl.duration));
+      cleanup();
+    };
 
-      videoEl.addEventListener("loadedmetadata", onLoadedMetadata);
-      videoEl.addEventListener("error", onError);
+    const cleanup = () => {
+      videoEl.removeEventListener("loadedmetadata", handleLoaded);
+      videoEl.remove();
+    };
 
-      return () => {
-        videoEl.removeEventListener("loadedmetadata", onLoadedMetadata);
-        videoEl.removeEventListener("error", onError);
-        videoEl.remove();
-      };
-    }
-  }, [videoFile]);
+    videoEl.addEventListener("loadedmetadata", handleLoaded);
+
+    return cleanup;
+  }, [video?.videoFile]);
 
   return (
-    <div
-      className="group bg-[var(--card-dark-bg,#1a1a1a)] rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:bg-[var(--card-dark-hover-bg,#333333)]
- flex flex-col cursor-pointer"
-    >
-      <Link to={`/watch/${video._id}`} className="block">
-        <div className="relative">
-          <img
-            src={thumbnail}
-            alt={video.title}
-            className="w-full h-40 sm:h-48 object-cover"
-            onError={(e) => {
-              e.gittarget.src =
-                "https://placehold.co/600x400/1a1a1a/ffffff?text=Video";
-            }}
-          />
-          <span className="absolute right-2 bottom-2 text-xs bg-black/70 px-1.5 py-0.5 rounded">
-            {duration}
-          </span>
-        </div>
+    <div className="group bg-neutral-900 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col">
+
+      {/* Thumbnail */}
+      <Link to={`/watch/${video._id}`} className="relative block">
+
+        <img
+          src={thumbnail}
+          alt={video.title}
+          loading="lazy"
+          className="w-full h-44 sm:h-52 object-cover transition-transform duration-300 group-hover:scale-105"
+          onError={(e) => {
+            e.currentTarget.src =
+              "https://placehold.co/600x400/1a1a1a/ffffff?text=Video";
+          }}
+        />
+
+        {/* Duration Badge */}
+        <span className="absolute bottom-2 right-2 bg-black/80 text-xs px-2 py-0.5 rounded-md text-white font-medium">
+          {duration}
+        </span>
       </Link>
 
+      {/* Content */}
       <div className="p-3 flex gap-3">
+
+        {/* Avatar */}
         <Link to={`/channel/${username}`}>
           <img
             src={avatar}
-            alt="avatar"
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover"
+            alt={username}
+            loading="lazy"
+            className="w-10 h-10 rounded-full object-cover border border-neutral-700"
             onError={(e) => {
-              e.target.src = "/default-avatar.png";
+              e.currentTarget.src = "/default-avatar.png";
             }}
           />
         </Link>
+
+        {/* Text */}
         <div className="flex-1 min-w-0">
-          {" "}
+
+          {/* Title */}
           <Link
             to={`/watch/${video._id}`}
-            className="font-semibold text-white line-clamp-2"
+            className="block text-white font-semibold text-sm leading-snug line-clamp-2 hover:text-blue-400 transition-colors"
             title={video.title}
           >
             {video.title}
           </Link>
-          <div className="text-sm text-[var(--muted,#aaa)] mt-1">
+
+          {/* Meta */}
+          <div className="mt-1 text-xs text-neutral-400 space-y-0.5">
+
             <Link
               to={`/channel/${username}`}
-              className="text-white transition-colors"
+              className="hover:text-white transition-colors block truncate"
             >
               {username}
             </Link>
-            <div className="truncate text-white"> {views} views</div>
+
+            <p>{views} views</p>
+
           </div>
         </div>
       </div>
