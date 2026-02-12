@@ -9,7 +9,6 @@ export default function CommentsSection({ id }) {
     const { fetchcomment, comments } = useComments();
 
     useEffect(()=>{
-        console.log("Updated comments:", comments);
         fetchcomment({id});
     },[id]);
 
